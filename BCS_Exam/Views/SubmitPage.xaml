@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             xmlns:converters="clr-namespace:BCS_Exam.Converters"
+             x:Class="BCS_Exam.Views.SubmitPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="inverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout VerticalOptions="FillAndExpand">
+        <Entry VerticalOptions="Start"
+               Placeholder="Enter Email Address"
+               Keyboard="Email"
+               Text="{Binding Email}"
+               />
+        <Label IsVisible="{Binding HasEmail, Converter={StaticResource inverseBoolConverter}}"
+               Style="{StaticResource warningText}"
+               HorizontalOptions="Center" 
+               HorizontalTextAlignment="Center" 
+               Text="Validation Error - Email is Required" />
+        <Button Text="Submit"
+                Command="{Binding SubmitCommand}"/>
+
+    </StackLayout>
+</ContentPage>

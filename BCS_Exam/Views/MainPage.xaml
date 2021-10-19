@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             xmlns:converters="clr-namespace:BCS_Exam.Converters"
+             x:Class="BCS_Exam.Views.MainPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="inverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout VerticalOptions="FillAndExpand">
+        <Entry VerticalOptions="Start"
+               Placeholder="Enter Park Code"
+               Text="{Binding ParkCode}"/>
+        <Label IsVisible="{Binding HasParkCode, Converter={StaticResource inverseBoolConverter}}"
+               Style="{StaticResource warningText}"
+               HorizontalOptions="Center" 
+               HorizontalTextAlignment="Center" 
+               Text="Validation Error - Park Code is Required" />
+        <DatePicker VerticalOptions="Start"
+                    Format="yyyy-MM-dd"
+                    Date="{Binding Arrival}"/>
+        <Label IsVisible="{Binding HasArrivalDate, Converter={StaticResource inverseBoolConverter}}"
+               Style="{StaticResource warningText}"
+               HorizontalOptions="Center" 
+               HorizontalTextAlignment="Center" 
+               Text="Validation Error - Arrival Date is Required" />
+        <Button Text="Search" Command="{Binding SearchCommand}"/>
+
+        <StackLayout IsVisible="{Binding HasCustomers, Converter={StaticResource inverseBoolConverter}}"
+                     VerticalOptions="FillAndExpand">
+            <Label Style="{StaticResource warningText}"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="Center" 
+               HorizontalTextAlignment="Center" 
+               Text="No results found" />
+        </StackLayout>
+
+        <ListView IsVisible="{Binding HasCustomers}"
+                  ItemsSource="{Binding Customers}"
+                  SelectedItem="{Binding SelectedCustomer}"
+                  HasUnevenRows="True"
+                  HorizontalOptions="FillAndExpand"
+                  VerticalOptions="FillAndExpand">
+            <ListView.Behaviors>
+                <prism:EventToCommandBehavior EventName="ItemSelected"
+                                              Command="{Binding SelectCustomerCommand}"/>
+            </ListView.Behaviors>
+            <ListView.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Text="Guest Name"/>
+                    <Label Grid.Column="1" Text="Arrived" />
+                    <Label Grid.Column="2" Text="Departure" />
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding GuestName}"/>
+                            <Label Grid.Column="1" Text="{Binding Arrived}" />
+                            <Label Grid.Column="2" Text="{Binding Depart}" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
+</ContentPage>
